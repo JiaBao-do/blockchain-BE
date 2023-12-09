@@ -1,6 +1,9 @@
 package model
 
-import "log"
+import (
+	"encoding/json"
+	"log"
+)
 
 type Blockchain struct {
 	blocks []*Block
@@ -36,10 +39,29 @@ func GetBlockChain() []Block {
 
 	for i, block := range BlockChain.blocks {
 		result[i] = *block
+
 	}
 
-	log.Println("Blockchain :: ", result)
-	log.Println("[Start] GetBlockChain")
+	/*  {
+		position:
+		data: {
+			content:
+			is_genesis:
+		}
+		timestamp:
+		hash:
+		preve_hash:
+	}
+	*/
+
+	val, err := json.MarshalIndent(result, "", "    ")
+	if err != nil {
+		log.Printf("Error marshalling JSON: %s", err)
+		log.Println("[End] GetBlockChain")
+		return nil
+	}
+	log.Println("Blockchain :: ", string(val))
+	log.Println("[End] GetBlockChain")
 	return result
 }
 
